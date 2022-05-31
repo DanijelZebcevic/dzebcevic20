@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="dzebcevic20_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Korisnik">
+          <Key>
+            <PropertyRef Name="ID_korisnika" />
+          </Key>
+          <Property Name="ID_korisnika" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="korisnickoIme" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="lozinka" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="isAdmin" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Oprema">
+          <Key>
+            <PropertyRef Name="ID_oprema" />
+          </Key>
+          <Property Name="ID_oprema" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dobavljac" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="datum" Type="date" Nullable="false" />
+          <Property Name="izvorFinancija" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="nazivProjekta" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="vrstaOpreme" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="nazivOpreme" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="opisOpreme" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="zaprimac" Type="nchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rezervacija">
+          <Key>
+            <PropertyRef Name="ID_rezervacije" />
+          </Key>
+          <Property Name="ID_rezervacije" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="datumRezervacije" Type="date" Nullable="false" />
+          <Property Name="ID_oprema" Type="int" Nullable="false" />
+          <Property Name="ID_korisnika" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Rezervacija_Korisnik">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="1" />
+          <End Role="Rezervacija" Type="Self.Rezervacija" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Korisnik">
+              <PropertyRef Name="ID_korisnika" />
+            </Principal>
+            <Dependent Role="Rezervacija">
+              <PropertyRef Name="ID_korisnika" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezervacija_Oprema">
+          <End Role="Oprema" Type="Self.Oprema" Multiplicity="1" />
+          <End Role="Rezervacija" Type="Self.Rezervacija" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Oprema">
+              <PropertyRef Name="ID_oprema" />
+            </Principal>
+            <Dependent Role="Rezervacija">
+              <PropertyRef Name="ID_oprema" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dzebcevic20_DBModelStoreContainer">
+          <EntitySet Name="Korisnik" EntityType="Self.Korisnik" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Oprema" EntityType="Self.Oprema" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rezervacija" EntityType="Self.Rezervacija" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Rezervacija_Korisnik" Association="Self.FK_Rezervacija_Korisnik">
+            <End Role="Korisnik" EntitySet="Korisnik" />
+            <End Role="Rezervacija" EntitySet="Rezervacija" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezervacija_Oprema" Association="Self.FK_Rezervacija_Oprema">
+            <End Role="Oprema" EntitySet="Oprema" />
+            <End Role="Rezervacija" EntitySet="Rezervacija" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dzebcevic20_DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Korisnik">
+          <Key>
+            <PropertyRef Name="ID_korisnika" />
+          </Key>
+          <Property Name="ID_korisnika" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="korisnickoIme" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="lozinka" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="isAdmin" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Rezervacijas" Relationship="Self.FK_Rezervacija_Korisnik" FromRole="Korisnik" ToRole="Rezervacija" />
+        </EntityType>
+        <EntityType Name="Oprema">
+          <Key>
+            <PropertyRef Name="ID_oprema" />
+          </Key>
+          <Property Name="ID_oprema" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dobavljac" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="datum" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="izvorFinancija" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="nazivProjekta" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="vrstaOpreme" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="nazivOpreme" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="opisOpreme" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="zaprimac" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Rezervacijas" Relationship="Self.FK_Rezervacija_Oprema" FromRole="Oprema" ToRole="Rezervacija" />
+        </EntityType>
+        <EntityType Name="Rezervacija">
+          <Key>
+            <PropertyRef Name="ID_rezervacije" />
+          </Key>
+          <Property Name="ID_rezervacije" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="datumRezervacije" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ID_oprema" Type="Int32" Nullable="false" />
+          <Property Name="ID_korisnika" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Korisnik" Relationship="Self.FK_Rezervacija_Korisnik" FromRole="Rezervacija" ToRole="Korisnik" />
+          <NavigationProperty Name="Oprema" Relationship="Self.FK_Rezervacija_Oprema" FromRole="Rezervacija" ToRole="Oprema" />
+        </EntityType>
+        <Association Name="FK_Rezervacija_Korisnik">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="1" />
+          <End Role="Rezervacija" Type="Self.Rezervacija" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Korisnik">
+              <PropertyRef Name="ID_korisnika" />
+            </Principal>
+            <Dependent Role="Rezervacija">
+              <PropertyRef Name="ID_korisnika" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezervacija_Oprema">
+          <End Role="Oprema" Type="Self.Oprema" Multiplicity="1" />
+          <End Role="Rezervacija" Type="Self.Rezervacija" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Oprema">
+              <PropertyRef Name="ID_oprema" />
+            </Principal>
+            <Dependent Role="Rezervacija">
+              <PropertyRef Name="ID_oprema" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dzebcevic20_DBEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Korisniks" EntityType="Self.Korisnik" />
+          <EntitySet Name="Opremas" EntityType="Self.Oprema" />
+          <EntitySet Name="Rezervacijas" EntityType="Self.Rezervacija" />
+          <AssociationSet Name="FK_Rezervacija_Korisnik" Association="Self.FK_Rezervacija_Korisnik">
+            <End Role="Korisnik" EntitySet="Korisniks" />
+            <End Role="Rezervacija" EntitySet="Rezervacijas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezervacija_Oprema" Association="Self.FK_Rezervacija_Oprema">
+            <End Role="Oprema" EntitySet="Opremas" />
+            <End Role="Rezervacija" EntitySet="Rezervacijas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="dzebcevic20_DBModelStoreContainer" CdmEntityContainer="dzebcevic20_DBEntities1">
+          <EntitySetMapping Name="Korisniks">
+            <EntityTypeMapping TypeName="dzebcevic20_DBModel.Korisnik">
+              <MappingFragment StoreEntitySet="Korisnik">
+                <ScalarProperty Name="ID_korisnika" ColumnName="ID_korisnika" />
+                <ScalarProperty Name="korisnickoIme" ColumnName="korisnickoIme" />
+                <ScalarProperty Name="lozinka" ColumnName="lozinka" />
+                <ScalarProperty Name="isAdmin" ColumnName="isAdmin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Opremas">
+            <EntityTypeMapping TypeName="dzebcevic20_DBModel.Oprema">
+              <MappingFragment StoreEntitySet="Oprema">
+                <ScalarProperty Name="ID_oprema" ColumnName="ID_oprema" />
+                <ScalarProperty Name="dobavljac" ColumnName="dobavljac" />
+                <ScalarProperty Name="datum" ColumnName="datum" />
+                <ScalarProperty Name="izvorFinancija" ColumnName="izvorFinancija" />
+                <ScalarProperty Name="nazivProjekta" ColumnName="nazivProjekta" />
+                <ScalarProperty Name="vrstaOpreme" ColumnName="vrstaOpreme" />
+                <ScalarProperty Name="nazivOpreme" ColumnName="nazivOpreme" />
+                <ScalarProperty Name="opisOpreme" ColumnName="opisOpreme" />
+                <ScalarProperty Name="zaprimac" ColumnName="zaprimac" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rezervacijas">
+            <EntityTypeMapping TypeName="dzebcevic20_DBModel.Rezervacija">
+              <MappingFragment StoreEntitySet="Rezervacija">
+                <ScalarProperty Name="ID_rezervacije" ColumnName="ID_rezervacije" />
+                <ScalarProperty Name="datumRezervacije" ColumnName="datumRezervacije" />
+                <ScalarProperty Name="ID_oprema" ColumnName="ID_oprema" />
+                <ScalarProperty Name="ID_korisnika" ColumnName="ID_korisnika" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
